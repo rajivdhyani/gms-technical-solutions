@@ -1,4 +1,4 @@
-import { longDate, seatsLabel, waLink } from "@/lib/format";
+import { seatsLabel, waLink } from "@/lib/format";
 import { CONTACT, formatPhone } from "@/lib/contact";
 import { Badge, btnClass } from "@/components/ui";
 
@@ -53,7 +53,7 @@ export function BatchCard({
               <rect x="3" y="4" width="18" height="18" rx="2" />
               <path d="M16 2v4M8 2v4M3 10h18" />
             </svg>
-            Starts {longDate(batch.startDate)} · {batch.label}
+            {batch.label}
           </p>
           <p className="flex items-center gap-2 text-sm leading-7 muted">
             <svg
@@ -84,7 +84,7 @@ export function BatchCard({
           <a
             href={waLink(
               batch.centreWhatsapp ?? CONTACT.whatsapp,
-              `Hi, I'd like to know about the ${batch.label} for ${courseTitle} starting ${longDate(batch.startDate)}.`,
+              `Hi, I'd like to know about the ${batch.label} for ${courseTitle}.`,
             )}
             className={btnClass("outline", "md")}
           >

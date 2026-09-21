@@ -21,7 +21,6 @@ export type CourseSummary = {
 
 export type BatchSummary = {
   label: string;
-  startDate: string;
   mode: string;
   centreName: string | null;
 };
@@ -107,7 +106,7 @@ export function enquiryConfirmationEmail(input: EnquiryEmailInput): {
                     <strong style="color: ${INK};">Duration</strong> &nbsp;${esc(course.duration)}
                     ${
                       batch
-                        ? `<br><strong style="color: ${INK};">Batch</strong> &nbsp;${esc(batch.label)}, starts ${esc(batch.startDate)}
+                        ? `<br><strong style="color: ${INK};">Batch</strong> &nbsp;${esc(batch.label)}
                            <br><strong style="color: ${INK};">Mode</strong> &nbsp;${esc(batch.mode)}${batch.centreName ? ` — ${esc(batch.centreName)}` : ""}`
                         : ""
                     }
@@ -322,7 +321,7 @@ export function enquiryConfirmationEmail(input: EnquiryEmailInput): {
     );
     if (batch) {
       lines.push(
-        `Batch: ${batch.label}, starts ${batch.startDate}`,
+        `Batch: ${batch.label}`,
         `Mode: ${batch.mode}${batch.centreName ? ` — ${batch.centreName}` : ""}`,
       );
     }

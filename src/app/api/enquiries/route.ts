@@ -3,7 +3,7 @@ import { and, eq, ne } from "drizzle-orm";
 import { getDb, schema } from "@/db";
 import { sendEmail } from "@/lib/email";
 import { SITE_URL } from "@/lib/contact";
-import { longDate, MODE_LABEL } from "@/lib/format";
+import { MODE_LABEL } from "@/lib/format";
 import { durationText, KIND_PATH } from "@/lib/programmes";
 import { getTheme, THEMES } from "@/lib/theme";
 import {
@@ -122,7 +122,6 @@ async function sendConfirmation({
     const [row] = await db
       .select({
         label: schema.batches.label,
-        startDate: schema.batches.startDate,
         mode: schema.batches.mode,
         centreName: schema.centres.name,
       })
@@ -132,7 +131,6 @@ async function sendConfirmation({
     if (row) {
       batch = {
         label: row.label,
-        startDate: longDate(row.startDate),
         mode: MODE_LABEL[row.mode] ?? row.mode,
         centreName: row.centreName,
       };

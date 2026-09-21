@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getDb, schema } from "@/db";
-import { longDate, seatsLabel } from "@/lib/format";
+import { seatsLabel } from "@/lib/format";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { KIND_PATH } from "@/lib/programmes";
 import { eq, and, asc } from "drizzle-orm";
@@ -102,7 +102,7 @@ export default async function CentrePage({ params }: { params: Promise<{ slug: s
               <div>
                 <p className="text-[15px] font-bold tracking-tight">{b.courseTitle}</p>
                 <p className="text-sm muted">
-                  {b.label} · starts {longDate(b.startDate)} · {b.schedule}
+                  {b.label} · {b.schedule}
                 </p>
               </div>
               <div className="flex items-center gap-4">

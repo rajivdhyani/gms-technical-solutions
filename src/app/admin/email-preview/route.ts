@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { getDb, schema } from "@/db";
 import { isSignedIn } from "@/lib/auth";
 import { SITE_URL } from "@/lib/contact";
-import { longDate, MODE_LABEL } from "@/lib/format";
+import { MODE_LABEL } from "@/lib/format";
 import { durationText, KIND_PATH } from "@/lib/programmes";
 import { getTheme, THEMES } from "@/lib/theme";
 import { enquiryConfirmationEmail, type OtherCourse } from "@/emails/enquiry-confirmation";
@@ -33,7 +33,6 @@ export async function GET() {
     ? await db
         .select({
           label: schema.batches.label,
-          startDate: schema.batches.startDate,
           mode: schema.batches.mode,
           price: schema.batches.price,
           centreName: schema.centres.name,
@@ -82,7 +81,6 @@ export async function GET() {
     batch: batchRow
       ? {
           label: batchRow.label,
-          startDate: longDate(batchRow.startDate),
           mode: MODE_LABEL[batchRow.mode] ?? batchRow.mode,
           centreName: batchRow.centreName,
         }

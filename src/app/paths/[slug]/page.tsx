@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPath } from "@/lib/paths";
-import { longDate } from "@/lib/format";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { CONTACT } from "@/lib/contact";
 
@@ -27,7 +26,7 @@ export default async function PathPage({ params }: { params: Promise<{ slug: str
   const data = await getPath(slug);
   if (!data) notFound();
 
-  const { path, steps, weeks, startsFrom } = data;
+  const { path, steps, weeks } = data;
 
   return (
     <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_340px] lg:gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
@@ -92,10 +91,7 @@ export default async function PathPage({ params }: { params: Promise<{ slug: str
           <p className="text-xs font-semibold uppercase tracking-wider muted">
             Full path, offline
           </p>
-          <p className="mb-3 mt-1 text-sm muted">
-            About {months(weeks)} in total
-            {startsFrom ? `, starting ${longDate(startsFrom)}` : ""}.
-          </p>
+          <p className="mb-3 mt-1 text-sm muted">About {months(weeks)} in total.</p>
           <EnquiryForm ctaLabel="Book a free demo class" compact />
           <p className="mt-3 text-xs muted">
             Not sure this is the right path? Call{" "}
