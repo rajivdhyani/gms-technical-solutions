@@ -42,13 +42,17 @@ function CheckIcon() {
   );
 }
 
-/** The inline pill for course and path cards. */
-export function AiIncludedChip({ label = AI_TRAINING.chip }: { label?: string }) {
+/**
+ * The card footer band. Full width rather than a pill so it lands on the same
+ * baseline in every card of a row, and single-line at every grid width so no
+ * card grows taller than its neighbours.
+ */
+export function AiIncludedNote({ label = AI_TRAINING.card }: { label?: string }) {
   return (
-    <span className="ai-chip">
+    <p className="ai-note">
       <SparkIcon size={13} />
-      {label}
-    </span>
+      <span className="ai-note-label">{label}</span>
+    </p>
   );
 }
 

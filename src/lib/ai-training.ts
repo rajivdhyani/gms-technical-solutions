@@ -9,7 +9,10 @@ export const AI_TRAINING = {
   title: "Bonus Free AI Training with each module",
   blurb:
     "Every module you study comes with its own hands-on AI training, free of charge — so alongside the subject itself you learn how to do that work with the tools the industry actually uses.",
-  chip: "Bonus Free AI Training with each module",
+  /** Card footers are as narrow as 194px in the four-up paths grid, where the
+   *  full headline cannot sit on one line. This is the same offer, short
+   *  enough to stay on one line in every grid so the cards align. */
+  card: "Bonus free AI training",
   /** Short line for tight spaces, such as the career path sidebar. */
   short: "Bonus free AI training with each module",
   points: [
