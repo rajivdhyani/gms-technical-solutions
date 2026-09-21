@@ -33,7 +33,7 @@ export function CourseCard({
       <h3 className="mb-1.5 text-[17px] font-bold leading-snug tracking-tight">{course.title}</h3>
       <p className="mb-4 text-sm leading-6 muted line-clamp-2">{course.tagline}</p>
       <div className="flex flex-wrap items-center gap-2">
-        <AiIncludedChip label="Free AI training" />
+        <AiIncludedChip />
         {fromMode ? (
           <span className="text-sm" style={{ color: "var(--color-ink-3)" }}>
             {MODE_LABEL[fromMode]}

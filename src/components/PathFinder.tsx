@@ -29,7 +29,7 @@ export function PathFinder({ items, heading }: { items: Item[]; heading?: string
             <p className="mb-3 text-xs font-medium" style={{ color: "var(--color-ink-3)" }}>
               {steps.length} {steps.length === 1 ? "course" : "courses"} · about {months(weeks)}
             </p>
-            <AiIncludedChip label="Free AI training" />
+            <AiIncludedChip />
           </Link>
         ))}
       </div>

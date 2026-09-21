@@ -6,20 +6,20 @@
 
 export const AI_TRAINING = {
   eyebrow: "Included with every programme",
-  title: "Free AI Training & Support",
+  title: "Bonus Free AI Training with each module",
   blurb:
-    "Every course, career path and internship comes with hands-on AI training at no extra cost — so you leave knowing how to use the tools the industry actually works with.",
-  chip: "Free AI training included",
+    "Every module you study comes with its own hands-on AI training, free of charge — so alongside the subject itself you learn how to do that work with the tools the industry actually uses.",
+  chip: "Bonus Free AI Training with each module",
   /** Short line for tight spaces, such as the career path sidebar. */
-  short: "Free AI training and support included",
+  short: "Bonus free AI training with each module",
   points: [
     {
       title: "Real tools, hands-on",
       body: "ChatGPT, Copilot and the AI assistants teams actually use day to day.",
     },
     {
-      title: "Applied to your subject",
-      body: "Use AI on the same code, data or design work your course already covers.",
+      title: "Tied to each module",
+      body: "The AI session covers the same code, data or design work that module just taught.",
     },
     {
       title: "Support while you learn",

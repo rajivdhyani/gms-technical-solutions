@@ -521,15 +521,20 @@ body {
 
 .ai-chip {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 5px;
   padding: 3px 9px 3px 7px;
   border: 1px solid color-mix(in oklab, var(--accent) 28%, var(--line));
   border-radius: 999px;
   font-size: 11.5px;
   font-weight: 700;
-  line-height: 1.5;
-  white-space: nowrap;
+  line-height: 1.45;
+  text-align: left;
   color: var(--accent-ink);
   background: color-mix(in oklab, var(--accent-soft) 70%, var(--bg));
+}
+
+/* Keeps the spark on the first line now that the chip label can wrap. */
+.ai-chip svg {
+  margin-top: 2px;
 }
