@@ -4,6 +4,7 @@ import { listPaths } from "@/lib/paths";
 import { PathFinder } from "@/components/PathFinder";
 import { CourseCard } from "@/components/CourseCard";
 import { btnClass } from "@/components/ui";
+import { AiIncludedPanel } from "@/components/AiIncluded";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,10 @@ export default async function Home() {
             Internships and industrial training
           </Link>
         </div>
+      </section>
+
+      <section className="mb-16">
+        <AiIncludedPanel />
       </section>
 
       <section className="mb-16">

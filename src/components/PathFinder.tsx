@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AiIncludedChip } from "@/components/AiIncluded";
 
 type Item = {
   path: { id: number; slug: string; title: string; tagline: string | null };
@@ -25,9 +26,10 @@ export function PathFinder({ items, heading }: { items: Item[]; heading?: string
               {path.title}
             </h3>
             <p className="mb-4 text-sm leading-6 muted line-clamp-2">{path.tagline}</p>
-            <p className="text-xs font-medium" style={{ color: "var(--color-ink-3)" }}>
+            <p className="mb-3 text-xs font-medium" style={{ color: "var(--color-ink-3)" }}>
               {steps.length} {steps.length === 1 ? "course" : "courses"} · about {months(weeks)}
             </p>
+            <AiIncludedChip label="Free AI training" />
           </Link>
         ))}
       </div>

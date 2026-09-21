@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPath } from "@/lib/paths";
 import { EnquiryForm } from "@/components/EnquiryForm";
+import { AiIncludedPanel } from "@/components/AiIncluded";
 import { CONTACT } from "@/lib/contact";
 
 export const dynamic = "force-dynamic";
@@ -78,6 +79,10 @@ export default async function PathPage({ params }: { params: Promise<{ slug: str
           ))}
         </ol>
 
+        <div className="mt-6">
+          <AiIncludedPanel />
+        </div>
+
         {path.outcome ? (
           <div className="card mt-6 p-4">
             <h2 className="mb-1 text-lg font-bold tracking-tight">Roles this prepares you for</h2>
@@ -92,6 +97,9 @@ export default async function PathPage({ params }: { params: Promise<{ slug: str
             Full path, offline
           </p>
           <p className="mb-3 mt-1 text-sm muted">About {months(weeks)} in total.</p>
+          <div className="mb-4">
+            <AiIncludedPanel compact />
+          </div>
           <EnquiryForm ctaLabel="Book a free demo class" compact />
           <p className="mt-3 text-xs muted">
             Not sure this is the right path? Call{" "}

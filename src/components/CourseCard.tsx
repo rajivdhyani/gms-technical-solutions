@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MODE_LABEL } from "@/lib/format";
 import { durationText, KIND_PATH, type EntryMode } from "@/lib/programmes";
 import { Badge } from "@/components/ui";
+import { AiIncludedChip } from "@/components/AiIncluded";
 import type { Course } from "@/db/schema";
 
 export function CourseCard({
@@ -31,11 +32,14 @@ export function CourseCard({
       </div>
       <h3 className="mb-1.5 text-[17px] font-bold leading-snug tracking-tight">{course.title}</h3>
       <p className="mb-4 text-sm leading-6 muted line-clamp-2">{course.tagline}</p>
-      {fromMode ? (
-        <p className="text-sm" style={{ color: "var(--color-ink-3)" }}>
-          {MODE_LABEL[fromMode]}
-        </p>
-      ) : null}
+      <div className="flex flex-wrap items-center gap-2">
+        <AiIncludedChip label="Free AI training" />
+        {fromMode ? (
+          <span className="text-sm" style={{ color: "var(--color-ink-3)" }}>
+            {MODE_LABEL[fromMode]}
+          </span>
+        ) : null}
+      </div>
     </Link>
   );
 }

@@ -19,7 +19,7 @@ export default async function PathsPage() {
       <p className="mb-10 max-w-2xl text-[17px] leading-8 muted">
         Most people arrive knowing the job they want, not the technology. Pick a role and we will
         show you the courses that get you there, in the order that makes sense, with the total time
-        and fee.
+        it takes.
       </p>
       <PathFinder items={items} />
     </>

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CourseModes } from "@/components/CourseModes";
+import { AiIncludedPanel } from "@/components/AiIncluded";
 import { Badge } from "@/components/ui";
 import type { BatchView } from "@/components/BatchCard";
 import { getProgramme, durationText, type Kind } from "@/lib/programmes";
@@ -60,7 +61,11 @@ export async function ProgrammeDetail({ slug, kind }: { slug: string; kind: Kind
             {isInternship ? "certificate and completion letter" : "certificate on completion"}
           </p>
 
-          <p className="mb-10 text-[17px] leading-8">{course.description}</p>
+          <p className="mb-8 text-[17px] leading-8">{course.description}</p>
+
+          <div className="mb-10">
+            <AiIncludedPanel />
+          </div>
 
           {modules.length > 0 ? (
             <>
