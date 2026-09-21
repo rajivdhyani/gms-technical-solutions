@@ -237,7 +237,7 @@ export function enquiryConfirmationEmail(input: EnquiryEmailInput): {
               </tr>
               <tr>
                 <td width="26" valign="top" style="padding: 0 0 8px 0; color: ${accent}; font-weight: 700;">3.</td>
-                <td style="padding: 0 0 8px 0;">If it suits you, we confirm your seat and share the fee details with you.</td>
+                <td style="padding: 0 0 8px 0;">If it suits you, we confirm your seat and get you started.</td>
               </tr>
             </table>
           </td>
@@ -332,7 +332,7 @@ export function enquiryConfirmationEmail(input: EnquiryEmailInput): {
     "WHAT HAPPENS NEXT",
     "1. We call you to understand what you want to learn.",
     "2. You sit in on a free demo class, at the centre or live online.",
-    "3. If it suits you, we confirm your seat and share the fee details with you.",
+    "3. If it suits you, we confirm your seat and get you started.",
     "",
   );
 
