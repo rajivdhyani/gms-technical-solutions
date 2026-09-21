@@ -65,14 +65,21 @@ export async function POST(request: Request) {
 
   // The lead is saved by this point. Everything below is best effort: a mail
   // problem must never turn a captured enquiry into an error for the visitor.
+  let emailOutcome: unknown = null;
   if (email) {
     try {
-      await sendConfirmation({ db, name, email, courseId, batchId });
+      emailOutcome = await sendConfirmation({ db, name, email, courseId, batchId });
     } catch (err) {
+      emailOutcome = { ok: false, reason: "threw", detail: String(err) };
       console.error("Enquiry confirmation email failed:", err);
     }
   }
 
+  // Surfaced only in development, so the send can be diagnosed without
+  // digging through server logs. Production always returns the bare ok.
+  if (process.env.NODE_ENV === "development") {
+    return NextResponse.json({ ok: true, _email: emailOutcome }, { status: 201 });
+  }
   return NextResponse.json({ ok: true }, { status: 201 });
 }
 
@@ -185,4 +192,5 @@ async function sendConfirmation({
   if (!result.ok && result.reason !== "not-configured") {
     console.error("Resend rejected the confirmation email:", result.reason, result.detail);
   }
+  return result;
 }
