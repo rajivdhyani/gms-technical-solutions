@@ -24,14 +24,11 @@ export type BatchSummary = {
   startDate: string;
   mode: string;
   centreName: string | null;
-  price: string;
-  installments: string | null;
 };
 
 export type OtherCourse = {
   title: string;
   tagline: string | null;
-  fromPrice: string | null;
   url: string;
 };
 
@@ -111,8 +108,7 @@ export function enquiryConfirmationEmail(input: EnquiryEmailInput): {
                     ${
                       batch
                         ? `<br><strong style="color: ${INK};">Batch</strong> &nbsp;${esc(batch.label)}, starts ${esc(batch.startDate)}
-                           <br><strong style="color: ${INK};">Mode</strong> &nbsp;${esc(batch.mode)}${batch.centreName ? ` — ${esc(batch.centreName)}` : ""}
-                           <br><strong style="color: ${INK};">Fee</strong> &nbsp;${esc(batch.price)}${batch.installments ? ` &nbsp;<span style="color: ${INK_3};">(${esc(batch.installments)})</span>` : ""}`
+                           <br><strong style="color: ${INK};">Mode</strong> &nbsp;${esc(batch.mode)}${batch.centreName ? ` — ${esc(batch.centreName)}` : ""}`
                         : ""
                     }
                   </td>
@@ -161,11 +157,6 @@ export function enquiryConfirmationEmail(input: EnquiryEmailInput): {
                     ${
                       o.tagline
                         ? `<div style="font-size: 13px; color: ${INK_2}; line-height: 1.6; padding-top: 3px;">${esc(o.tagline)}</div>`
-                        : ""
-                    }
-                    ${
-                      o.fromPrice
-                        ? `<div style="font-size: 13px; color: ${INK_3}; padding-top: 6px;">from <strong style="color: ${accent};">${esc(o.fromPrice)}</strong></div>`
                         : ""
                     }
                   </td>
@@ -247,7 +238,7 @@ export function enquiryConfirmationEmail(input: EnquiryEmailInput): {
               </tr>
               <tr>
                 <td width="26" valign="top" style="padding: 0 0 8px 0; color: ${accent}; font-weight: 700;">3.</td>
-                <td style="padding: 0 0 8px 0;">If it suits you, we confirm your seat. Fees can be paid in installments.</td>
+                <td style="padding: 0 0 8px 0;">If it suits you, we confirm your seat and share the fee details with you.</td>
               </tr>
             </table>
           </td>
@@ -333,7 +324,6 @@ export function enquiryConfirmationEmail(input: EnquiryEmailInput): {
       lines.push(
         `Batch: ${batch.label}, starts ${batch.startDate}`,
         `Mode: ${batch.mode}${batch.centreName ? ` — ${batch.centreName}` : ""}`,
-        `Fee: ${batch.price}${batch.installments ? ` (${batch.installments})` : ""}`,
       );
     }
     lines.push(`Syllabus: ${course.url}`, "");
@@ -343,14 +333,14 @@ export function enquiryConfirmationEmail(input: EnquiryEmailInput): {
     "WHAT HAPPENS NEXT",
     "1. We call you to understand what you want to learn.",
     "2. You sit in on a free demo class, at the centre or live online.",
-    "3. If it suits you, we confirm your seat. Fees can be paid in installments.",
+    "3. If it suits you, we confirm your seat and share the fee details with you.",
     "",
   );
 
   if (others.length) {
     lines.push("YOU MIGHT ALSO BE INTERESTED IN");
     for (const o of others) {
-      lines.push(`- ${o.title}${o.fromPrice ? ` (from ${o.fromPrice})` : ""}`, `  ${o.url}`);
+      lines.push(`- ${o.title}`, `  ${o.url}`);
     }
     lines.push("");
   }

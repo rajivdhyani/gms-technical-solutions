@@ -22,7 +22,7 @@ export default async function Home() {
         </h1>
         <p className="mb-7 max-w-2xl text-[17px] leading-8 muted">
           Small batches, working instructors, and projects you can actually show an employer.
-          Weekday and weekend timings, with fees payable in installments.
+          Weekday, evening and weekend timings.
         </p>
         <div className="flex flex-wrap gap-3">
           <Link href="/paths" className={btnClass("primary", "lg")}>

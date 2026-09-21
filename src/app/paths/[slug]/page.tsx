@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPath } from "@/lib/paths";
-import { inr, longDate } from "@/lib/format";
+import { longDate } from "@/lib/format";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { CONTACT } from "@/lib/contact";
 
@@ -27,7 +27,7 @@ export default async function PathPage({ params }: { params: Promise<{ slug: str
   const data = await getPath(slug);
   if (!data) notFound();
 
-  const { path, steps, weeks, total, startsFrom } = data;
+  const { path, steps, weeks, startsFrom } = data;
 
   return (
     <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_340px] lg:gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
@@ -70,10 +70,7 @@ export default async function PathPage({ params }: { params: Promise<{ slug: str
                     >
                       {s.course.title}
                     </Link>
-                    <span className="text-sm">
-                      {s.price ? inr(s.price) : "Enquire"}
-                      <span className="muted"> · {s.course.durationWeeks} weeks</span>
-                    </span>
+                    <span className="text-sm muted">{s.course.durationWeeks} weeks</span>
                   </div>
                   {s.note ? <p className="mt-1 text-sm muted leading-7">{s.note}</p> : null}
                 </div>
@@ -95,11 +92,9 @@ export default async function PathPage({ params }: { params: Promise<{ slug: str
           <p className="text-xs font-semibold uppercase tracking-wider muted">
             Full path, offline
           </p>
-          <p className="mt-1 text-3xl font-bold tracking-tight">{total ? inr(total) : "—"}</p>
-          <p className="mb-3 text-sm muted">
+          <p className="mb-3 mt-1 text-sm muted">
             About {months(weeks)} in total
-            {startsFrom ? `, starting ${longDate(startsFrom)}` : ""}. Courses are paid for one at a
-            time, as you start each one.
+            {startsFrom ? `, starting ${longDate(startsFrom)}` : ""}.
           </p>
           <EnquiryForm ctaLabel="Book a free demo class" compact />
           <p className="mt-3 text-xs muted">

@@ -1,4 +1,4 @@
-import { inr, longDate, seatsLabel, installmentLine, waLink } from "@/lib/format";
+import { longDate, seatsLabel, waLink } from "@/lib/format";
 import { CONTACT, formatPhone } from "@/lib/contact";
 import { Badge, btnClass } from "@/components/ui";
 
@@ -29,7 +29,6 @@ export function BatchCard({
 }) {
   const seats = seatsLabel(batch.capacity, batch.seatsTaken);
   const tone = seats.tone === "low" ? "warn" : seats.tone === "open" ? "ok" : "neutral";
-  const emi = installmentLine(batch.price, batch.installmentCount);
 
   return (
     <div
@@ -77,8 +76,6 @@ export function BatchCard({
         </div>
         <div className="text-right">
           <Badge tone={tone}>{seats.text}</Badge>
-          <p className="mt-2 text-lg font-bold tracking-tight">{inr(batch.price)}</p>
-          {emi && <p className="text-xs muted">{emi}</p>}
         </div>
       </div>
       <div className="mt-4 flex items-end gap-2">

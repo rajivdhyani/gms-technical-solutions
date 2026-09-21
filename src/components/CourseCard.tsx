@@ -1,16 +1,14 @@
 import Link from "next/link";
-import { inr, MODE_LABEL } from "@/lib/format";
+import { MODE_LABEL } from "@/lib/format";
 import { durationText, KIND_PATH, type EntryMode } from "@/lib/programmes";
 import { Badge } from "@/components/ui";
 import type { Course } from "@/db/schema";
 
 export function CourseCard({
   course,
-  fromPrice,
   fromMode,
 }: {
   course: Course;
-  fromPrice: number | null;
   fromMode: EntryMode | null;
 }) {
   const href = `${KIND_PATH[course.kind]}/${course.slug}`;
@@ -33,22 +31,11 @@ export function CourseCard({
       </div>
       <h3 className="mb-1.5 text-[17px] font-bold leading-snug tracking-tight">{course.title}</h3>
       <p className="mb-4 text-sm leading-6 muted line-clamp-2">{course.tagline}</p>
-      <p className="text-sm">
-        {fromPrice ? (
-          <>
-            <span style={{ color: "var(--color-ink-3)" }}>from </span>
-            <span className="text-[15px] font-bold">{inr(fromPrice)}</span>
-            {fromMode ? (
-              <span style={{ color: "var(--color-ink-3)" }}>
-                {" "}
-                · {MODE_LABEL[fromMode].toLowerCase()}
-              </span>
-            ) : null}
-          </>
-        ) : (
-          <span style={{ color: "var(--color-ink-3)" }}>Enquire for fees</span>
-        )}
-      </p>
+      {fromMode ? (
+        <p className="text-sm" style={{ color: "var(--color-ink-3)" }}>
+          {MODE_LABEL[fromMode]}
+        </p>
+      ) : null}
     </Link>
   );
 }

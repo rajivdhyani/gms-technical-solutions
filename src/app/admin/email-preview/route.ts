@@ -1,8 +1,8 @@
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getDb, schema } from "@/db";
 import { isSignedIn } from "@/lib/auth";
 import { SITE_URL } from "@/lib/contact";
-import { inr, longDate, installmentLine, MODE_LABEL } from "@/lib/format";
+import { longDate, MODE_LABEL } from "@/lib/format";
 import { durationText, KIND_PATH } from "@/lib/programmes";
 import { getTheme, THEMES } from "@/lib/theme";
 import { enquiryConfirmationEmail, type OtherCourse } from "@/emails/enquiry-confirmation";
@@ -36,7 +36,6 @@ export async function GET() {
           startDate: schema.batches.startDate,
           mode: schema.batches.mode,
           price: schema.batches.price,
-          installmentCount: schema.batches.installmentCount,
           centreName: schema.centres.name,
         })
         .from(schema.batches)
@@ -57,27 +56,14 @@ export async function GET() {
     .where(eq(schema.courses.published, true))
     .limit(5);
 
-  const prices = await db
-    .select({
-      courseId: schema.batches.courseId,
-      min: sql<number>`min(${schema.batches.price})`,
-    })
-    .from(schema.batches)
-    .where(eq(schema.batches.status, "upcoming"))
-    .groupBy(schema.batches.courseId);
-
   const others: OtherCourse[] = otherRows
     .filter((c) => c.id !== courseRow?.id)
     .slice(0, 4)
-    .map((c) => {
-      const p = prices.find((x) => x.courseId === c.id)?.min ?? null;
-      return {
-        title: c.title,
-        tagline: c.tagline,
-        fromPrice: p ? inr(p) : null,
-        url: `${SITE_URL}${KIND_PATH[c.kind]}/${c.slug}`,
-      };
-    });
+    .map((c) => ({
+      title: c.title,
+      tagline: c.tagline,
+      url: `${SITE_URL}${KIND_PATH[c.kind]}/${c.slug}`,
+    }));
 
   const { html } = enquiryConfirmationEmail({
     name: "Priya Sharma",
@@ -99,8 +85,6 @@ export async function GET() {
           startDate: longDate(batchRow.startDate),
           mode: MODE_LABEL[batchRow.mode] ?? batchRow.mode,
           centreName: batchRow.centreName,
-          price: inr(batchRow.price),
-          installments: installmentLine(batchRow.price, batchRow.installmentCount),
         }
       : null,
     others,

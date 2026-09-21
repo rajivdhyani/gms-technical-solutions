@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { and, eq, ne, sql } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { getDb, schema } from "@/db";
 import { sendEmail } from "@/lib/email";
 import { SITE_URL } from "@/lib/contact";
-import { inr, longDate, installmentLine, MODE_LABEL } from "@/lib/format";
+import { longDate, MODE_LABEL } from "@/lib/format";
 import { durationText, KIND_PATH } from "@/lib/programmes";
 import { getTheme, THEMES } from "@/lib/theme";
 import {
@@ -124,8 +124,6 @@ async function sendConfirmation({
         label: schema.batches.label,
         startDate: schema.batches.startDate,
         mode: schema.batches.mode,
-        price: schema.batches.price,
-        installmentCount: schema.batches.installmentCount,
         centreName: schema.centres.name,
       })
       .from(schema.batches)
@@ -137,13 +135,11 @@ async function sendConfirmation({
         startDate: longDate(row.startDate),
         mode: MODE_LABEL[row.mode] ?? row.mode,
         centreName: row.centreName,
-        price: inr(row.price),
-        installments: installmentLine(row.price, row.installmentCount),
       };
     }
   }
 
-  // A few other published programmes, with the cheapest upcoming price each.
+  // A few other published programmes to suggest alongside the one enquired about.
   const otherRows = await db
     .select({
       id: schema.courses.id,
@@ -160,24 +156,11 @@ async function sendConfirmation({
     )
     .limit(4);
 
-  const prices = await db
-    .select({
-      courseId: schema.batches.courseId,
-      min: sql<number>`min(${schema.batches.price})`,
-    })
-    .from(schema.batches)
-    .where(eq(schema.batches.status, "upcoming"))
-    .groupBy(schema.batches.courseId);
-
-  const others: OtherCourse[] = otherRows.map((c) => {
-    const p = prices.find((x) => x.courseId === c.id)?.min ?? null;
-    return {
-      title: c.title,
-      tagline: c.tagline,
-      fromPrice: p ? inr(p) : null,
-      url: `${SITE_URL}${KIND_PATH[c.kind]}/${c.slug}`,
-    };
-  });
+  const others: OtherCourse[] = otherRows.map((c) => ({
+    title: c.title,
+    tagline: c.tagline,
+    url: `${SITE_URL}${KIND_PATH[c.kind]}/${c.slug}`,
+  }));
 
   const { subject, html, text } = enquiryConfirmationEmail({ name, accent, course, batch, others });
 
