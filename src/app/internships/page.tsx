@@ -3,9 +3,10 @@ import { CourseCard } from "@/components/CourseCard";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
-  title: "Internships and industrial training",
+  title: "Internships and Industrial Training in Dehradun",
   description:
-    "Short-term internships of 1 to 2 months and full six-month industrial training in Dehradun, with a real project, a mentor and a verifiable certificate.",
+    "Short-term internships of 1 to 2 months and full six-month industrial training in Dehradun for B.Tech, BCA and MCA students, with a real project, a mentor and a verifiable certificate your college will accept.",
+  alternates: { canonical: "https://gmstechnicalsolutions.com/internships" },
 };
 
 export default async function InternshipsPage() {

@@ -2,7 +2,12 @@ import { listProgrammes } from "@/lib/programmes";
 import { CourseCard } from "@/components/CourseCard";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Courses" };
+export const metadata = {
+  title: "IT Courses in Dehradun — Full Stack, Python, Java, Data Science",
+  description:
+    "IT and computer science courses in Dehradun: full-stack web development, Python, Java, data science, cloud and software testing. Classroom batches at our Hathibarkala centre or live online, with weekday and weekend timings.",
+  alternates: { canonical: "https://gmstechnicalsolutions.com/courses" },
+};
 
 export default async function CoursesPage() {
   const items = await listProgrammes("course");

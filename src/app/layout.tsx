@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { CONTACT } from "@/lib/contact";
+import { CONTACT, SITE_URL } from "@/lib/contact";
 import { btnClass } from "@/components/ui";
 import { getTheme } from "@/lib/theme";
 import "./globals.css";
@@ -14,12 +14,23 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "GMS Technical Solutions — IT and CS training in Dehradun",
+    default: "IT Training Institute in Dehradun — GMS Technical Solutions",
     template: "%s | GMS Technical Solutions",
   },
   description:
-    "Offline and live online IT training in Dehradun — full-stack development, Java, Python, data science, cloud and more. Weekday, evening and weekend batches, plus internships and six-month industrial training.",
+    "IT and computer science training in Dehradun — full-stack development, Java, Python, data science and cloud. Classroom batches at our Hathibarkala centre or live online, with weekday and weekend timings, internships and six-month industrial training.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    siteName: "GMS Technical Solutions",
+    url: SITE_URL,
+    title: "IT Training Institute in Dehradun — GMS Technical Solutions",
+    description:
+      "Classroom and live online IT training in Dehradun. Full-stack development, Java, Python, data science and cloud, with internships and industrial training.",
+  },
 };
 
 const NAV = [
@@ -66,7 +77,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   {item.label}
                 </Link>
               ))}
-              <Link href="/courses" className={btnClass("primary", "sm")}>
+              <Link href="/contact" className={btnClass("primary", "sm")}>
                 Book a demo
               </Link>
             </div>

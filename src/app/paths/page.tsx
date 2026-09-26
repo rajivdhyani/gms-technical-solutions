@@ -3,9 +3,10 @@ import { PathFinder } from "@/components/PathFinder";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
-  title: "Career paths",
+  title: "IT Career Paths in Dehradun — Which Course Should You Take?",
   description:
-    "Pick the IT job you want — web developer, data analyst, QA engineer, cloud engineer and more — and see exactly which courses get you there, in order.",
+    "Pick the IT job you want — web developer, data analyst, QA engineer, cloud engineer and more — and see exactly which courses in Dehradun get you there, in order, with the total time it takes.",
+  alternates: { canonical: "https://gmstechnicalsolutions.com/paths" },
 };
 
 export default async function PathsPage() {
