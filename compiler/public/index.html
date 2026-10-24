@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GMSTechnicalSolutions — Online Compiler</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<style>
+  :root {
+    --bg: #f4f6f8; --panel: #fff; --border: #dfe3e8; --text: #263238;
+    --muted: #77818d; --accent: #1769e0; --ok: #16834a; --err: #c83232; --warn: #a76b00;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text);
+    font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  .site-header { height: 112px; flex: 0 0 112px; display: flex; align-items: center;
+    padding: 18px clamp(20px, 6.3vw, 78px); background: #fff; border-bottom: 1px solid var(--border); }
+  .brand { font-weight: 750; font-size: 24px; line-height: 1.15; letter-spacing: -.6px; color: #25364a; }
+  .brand span { color: var(--accent); }
+  .tag { margin-top: 5px; color: #657386; font-size: 15px; }
+  main { flex: 1; min-height: 560px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    background: #fff; }
+  .editor-wrap, aside { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+  .editor-wrap { border-right: 1px solid var(--border); }
+  .pane-toolbar { height: 60px; flex: 0 0 60px; display: flex; align-items: center; gap: 12px;
+    padding: 8px 18px; background: #fff; border-bottom: 1px solid var(--border); }
+  .file-tab { align-self: stretch; min-width: 96px; display: flex; align-items: center;
+    padding: 0 12px; color: #566273; border-right: 1px solid var(--border); }
+  .pane-spacer { flex: 1; }
+  select, button { font: inherit; border-radius: 5px; border: 1px solid var(--border);
+    background: #fff; color: var(--text); padding: 8px 12px; }
+  button { cursor: pointer; }
+  button.run { min-width: 98px; background: var(--accent); border-color: var(--accent);
+    color: #fff; font-weight: 650; padding: 8px 18px; }
+  button.run:disabled { opacity: .6; cursor: wait; }
+  #reset { color: #4e5d70; }
+  .plain-editor { width: 100%; flex: 1; min-height: 0; border: 0; outline: none; resize: none;
+    padding: 18px 22px; background: #fff; color: #263238; font: 14px/1.65 "JetBrains Mono", Consolas, monospace; tab-size: 4; }
+  .CodeMirror { flex: 1; height: auto; min-height: 0; font-size: 14px;
+    font-family: "JetBrains Mono", Consolas, monospace; background: #fff; color: #263238; }
+  .CodeMirror-gutters { background: #fff; border-right: 0; }
+  .CodeMirror-linenumber { color: #9aa4af; }
+  .CodeMirror-cursor { border-left: 1px solid #263238; }
+  .label { min-height: 60px; flex: 0 0 60px; padding: 8px 20px; font-size: 16px; color: #596779;
+    border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  pre#output { flex: 1; min-height: 180px; margin: 0; padding: 20px; overflow: auto; background: #fff;
+    white-space: pre-wrap; word-break: break-word; font: 14px/1.65 Consolas, monospace; color: #263238;
+    cursor: text; outline: none; }
+  /* Inline input line: the user types straight into the output console. */
+  #stdin-line { display: none; min-width: 2px; outline: none; color: var(--accent); caret-color: #263238; }
+  #output.running #stdin-line { display: inline; }
+  .status { font-weight: 600; }
+  .s-success { color: var(--ok); } .s-error { color: var(--err); } .s-warn { color: var(--warn); }
+  .err { color: var(--err); } .muted { color: var(--muted); }
+  @media (min-height: 700px) {
+    main { min-height: 0; }
+    .editor-wrap, aside { height: calc(100vh - 112px); }
+  }
+  @media (max-width: 760px) {
+    .site-header { height: 82px; flex-basis: 82px; padding: 14px 20px; }
+    .brand { font-size: 21px; }
+    main { display: flex; flex-direction: column; min-height: 0; }
+    .editor-wrap { height: 58vh; min-height: 380px; border-right: 0; border-bottom: 1px solid var(--border); }
+    aside { min-height: 420px; }
+    .pane-toolbar { padding: 8px 10px; gap: 7px; }
+    .file-tab { min-width: 58px; padding: 0 6px; font-size: 13px; }
+    .pane-toolbar select, .pane-toolbar button { padding: 7px 8px; font-size: 13px; }
+    .CodeMirror, .plain-editor { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div>
+    <div class="brand">GMS<span>Technical</span>Solutions</div>
+    <div class="tag">Online Compiler</div>
+  </div>
+</header>
+<main>
+  <div class="editor-wrap">
+    <div class="pane-toolbar">
+      <div id="filename" class="file-tab">main.c</div>
+      <div class="pane-spacer"></div>
+      <select id="lang" aria-label="Language"></select>
+      <button id="reset" title="Load sample code">Reset</button>
+      <button id="run" class="run" title="Ctrl + Enter">Run ▶</button>
+    </div>
+    <textarea id="code"></textarea>
+  </div>
+  <aside>
+    <div class="label"><span>Output</span><span id="status"></span></div>
+    <pre id="output"><span id="output-text" class="muted" aria-live="polite">Press ▶ Run (or Ctrl + Enter) to compile and run your program. Type input here when the program asks for it.</span><span id="stdin-line" contenteditable="true" spellcheck="false" aria-label="Program input"></span></pre>
+  </aside>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/go/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/mode/simple.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/rust/rust.min.js"></script>
+<script>
+const MODES = {
+  c: "text/x-csrc", cpp: "text/x-c++src", java: "text/x-java", csharp: "text/x-csharp",
+  python: "python", javascript: "javascript", go: "go", rust: "rust",
+};
+const $ = (id) => document.getElementById(id);
+let languages = [];
+let activeRunId = null;
+
+// Use the CodeMirror editor when it loaded from the CDN; otherwise fall back to a
+// plain code box with the same methods, so the app still works offline.
+function plainEditor(ta) {
+  ta.className = "plain-editor"; ta.spellcheck = false;
+  ta.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const s = ta.selectionStart;
+      ta.setRangeText("    ", s, ta.selectionEnd, "end");
+    } else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); run(); }
+  });
+  return {
+    getValue: () => ta.value,
+    setValue: (v) => { ta.value = v; ta.dispatchEvent(new Event("input")); },
+    setOption: () => {},
+    on: (ev, fn) => { if (ev === "change") ta.addEventListener("input", fn); },
+  };
+}
+const editor = window.CodeMirror
+  ? CodeMirror.fromTextArea($("code"), {
+      lineNumbers: true, theme: "material-darker", indentUnit: 4, tabSize: 4,
+      matchBrackets: true, autoCloseBrackets: true,
+      extraKeys: { "Ctrl-Enter": run, "Cmd-Enter": run },
+    })
+  : plainEditor($("code"));
+
+function current() { return languages.find(l => l.id === $("lang").value); }
+
+function saveDraft() {
+  try { localStorage.setItem("gms-code-" + $("lang").value, editor.getValue()); } catch (e) {}
+}
+function loadLang() {
+  const l = current();
+  $("filename").textContent = l.file;
+  let saved = null;
+  try { saved = localStorage.getItem("gms-code-" + l.id); } catch (e) {}
+  editor.setOption("mode", MODES[l.id] || "text/plain");
+  editor.setOption("theme", "default");
+  editor.setValue(saved || l.sample);
+}
+
+async function init() {
+  languages = await (await fetch("api/languages")).json();
+  $("lang").innerHTML = languages.map(l => `<option value="${l.id}">${l.name}</option>`).join("");
+  loadLang();
+}
+
+function esc(s) { return s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])); }
+
+async function run() {
+  const btn = $("run");
+  btn.disabled = true; btn.textContent = "Running…";
+  $("status").innerHTML = "";
+  $("stdin-line").textContent = "";
+  $("output-text").className = "muted";
+  $("output-text").textContent = "Compiling and running…";
+  try {
+    const res = await fetch("api/run", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        language: $("lang").value, code: editor.getValue(),
+        stdin: "", interactive: true,
+      }),
+    });
+    const result = await res.json();
+    if (!res.ok || result.status !== "running") {
+      show(result);
+      return;
+    }
+    activeRunId = result.runId;
+    $("output").classList.add("running");
+    focusInput();
+    await pollRun(result.runId);
+  } catch (e) {
+    show({ status: "error", message: "Could not reach the server: " + e.message });
+  } finally {
+    activeRunId = null;
+    $("output").classList.remove("running");
+    $("stdin-line").textContent = "";
+    btn.disabled = false; btn.textContent = "Run ▶";
+  }
+}
+
+// Put the caret at the end of the inline input line.
+function focusInput() {
+  const line = $("stdin-line");
+  line.focus();
+  const range = document.createRange();
+  range.selectNodeContents(line);
+  range.collapse(false);
+  const sel = window.getSelection();
+  sel.removeAllRanges(); sel.addRange(range);
+}
+
+async function pollRun(runId) {
+  while (activeRunId === runId) {
+    const res = await fetch(`api/run/${runId}`);
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.message || "Could not read program output.");
+    show(result);
+    if (result.status !== "running") return;
+    await new Promise(resolve => setTimeout(resolve, 150));
+  }
+}
+
+async function sendInput() {
+  if (!activeRunId) return;
+  const line = $("stdin-line");
+  const text = line.innerText.replace(/\r/g, "");
+  const input = text.endsWith("\n") ? text : text + "\n";
+  // Echo the line into the console right away; the next poll replaces it with the server transcript.
+  $("output-text").append(input);
+  line.textContent = "";
+  focusInput();
+  try {
+    const res = await fetch(`api/run/${activeRunId}/input`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input }),
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.message || "Could not send program input.");
+  } catch (e) {
+    $("output-text").append(`\nInput error: ${e.message}`);
+  }
+}
+
+function show(r) {
+  const out = $("output-text"); out.className = "";
+  const label = {
+    running: ["Running…", "s-warn"],
+    success: ["Success", "s-success"], compile_error: ["Compilation Error", "s-error"],
+    runtime_error: ["Runtime Error", "s-error"], timeout: ["Time Limit Exceeded", "s-warn"], error: ["Error", "s-error"],
+  }[r.status] || [r.status, "s-error"];
+  $("status").innerHTML = `<span class="status ${label[1]}">${label[0]}</span>` +
+    (r.time != null ? ` <span class="muted">· ${r.time} ms</span>` : "");
+
+  let html = "";
+  if (r.status === "compile_error") html = `<span class="err">${esc(r.output || "")}</span>`;
+  else if (r.status === "error") html = `<span class="err">${esc(r.message || "")}</span>`;
+  else {
+    if (r.warnings) html += `<span class="s-warn">${esc(r.warnings)}</span>\n\n`;
+    html += esc(r.transcript || r.stdout || "");
+    if (r.stderr) html += `<span class="err">${esc(r.stderr)}</span>`;
+    if (r.truncated) html += `\n<span class="s-warn">[output truncated]</span>`;
+    if (r.status === "timeout") html += `\n<span class="s-warn">Program stopped: took longer than the time limit.</span>`;
+    else if (r.status === "runtime_error") html += `\n<span class="err">Process exited with code ${r.exitCode}</span>`;
+    else if (r.status !== "running" && !r.stdout && !r.stderr) html += `<span class="muted">(no output)</span>`;
+  }
+  if (out.innerHTML === html) return;
+  out.innerHTML = html;
+  $("output").scrollTop = $("output").scrollHeight;
+}
+
+$("lang").addEventListener("change", loadLang);
+$("reset").addEventListener("click", () => { editor.setValue(current().sample); saveDraft(); });
+$("run").addEventListener("click", run);
+// Clicking anywhere in the console while a program runs puts the caret on the input line.
+$("output").addEventListener("mouseup", () => {
+  if (activeRunId && window.getSelection().isCollapsed) focusInput();
+});
+$("stdin-line").addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    sendInput();
+  }
+});
+$("stdin-line").addEventListener("paste", (event) => {
+  event.preventDefault();
+  document.execCommand("insertText", false, event.clipboardData.getData("text/plain"));
+});
+editor.on("change", saveDraft);
+init();
+</script>
+</body>
+</html>

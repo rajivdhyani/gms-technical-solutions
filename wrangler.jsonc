@@ -13,6 +13,9 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "services": [
+    { "binding": "COMPILER", "service": "gms-compiler" }
+  ],
   "d1_databases": [
     {
       "binding": "DB",

@@ -37,6 +37,7 @@ const NAV = [
   { href: "/paths", label: "Career paths" },
   { href: "/courses", label: "Courses" },
   { href: "/internships", label: "Internships" },
+  { href: "/compiler", label: "Compiler" },
   { href: "/contact", label: "Contact" },
 ];
 

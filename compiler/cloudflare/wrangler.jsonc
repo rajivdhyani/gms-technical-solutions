@@ -1,0 +1,27 @@
+// Cloudflare Worker + Container for the GMS online compiler.
+// Deploy from this folder with:  npm install  then  npx wrangler deploy   (Docker must be running).
+{
+  "name": "gms-compiler",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+
+  "containers": [
+    {
+      "class_name": "CompilerContainer",
+      "image": "../Dockerfile",        // the compiler's Dockerfile one folder up
+      // 1/2 vCPU, 4 GiB. Each program is capped at 256 MB (server.js), so this holds a classroom's
+      // worth of runs at once; "basic" (1 GiB) is too small, as one g++ compile may use up to 1 GB.
+      // Move up to standard-2 (1 vCPU, 6 GiB) if Java compiles feel slow when it is busy.
+      "instance_type": "standard-1",
+      "max_instances": 1               // run state is kept in memory, so all requests must reach one instance
+    }
+  ],
+  "durable_objects": {
+    "bindings": [{ "class_name": "CompilerContainer", "name": "COMPILER" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["CompilerContainer"] }],
+
+  // No public URL. The main site's Worker calls this one through the "COMPILER"
+  // service binding in the root wrangler.jsonc, and serves the editor at /compiler.
+  "workers_dev": false
+}
